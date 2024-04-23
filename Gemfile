@@ -15,6 +15,7 @@ gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
 gem "slack-ruby-client"
+gem "async-websocket", "~> 0.8.0"
 
 group :development, :test do
   gem 'dotenv-rails'
