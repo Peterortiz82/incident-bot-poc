@@ -1,7 +1,7 @@
 class Slack::Views::NewIncident < Slack::Web::Client
   attr_accessor :client, :params
 
-  def Initialize(params)
+  def initialize(params)
     @params = params
   end
 

@@ -4,7 +4,6 @@ class Slack::CommandsController < ApplicationController
   # before_action :verify_slack_request
 
   def create
-    binding.pry
     view_payload = Slack::Views::NewIncident.new(params).generate_payload
     render json: @client.views_open(view_payload)
   end
@@ -16,7 +15,6 @@ class Slack::CommandsController < ApplicationController
   end
 
   def verify_slack_request
-    binding.pry
     timestamp = request.headers['X-Slack-Request-Timestamp']
     if (Time.now.to_i - timestamp.to_i).abs > 60 * 5
       head :unauthorized
