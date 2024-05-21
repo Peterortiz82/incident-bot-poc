@@ -46,6 +46,8 @@ class Slack::ActionsController < ApplicationController
       if selected_users && !selected_users.empty?
         begin
           @client.conversations_invite(channel: channel_id, users: selected_users.join(','))
+
+          head :ok
         rescue Slack::Web::Api::Errors::SlackError => e
           puts "Slack API Error: #{e.message}"
           render json: { error: e.message }, status: :unprocessable_entity

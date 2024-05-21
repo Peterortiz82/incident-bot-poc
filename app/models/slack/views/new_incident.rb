@@ -6,7 +6,6 @@ class Slack::Views::NewIncident < Slack::Web::Client
   end
 
   def generate_payload
-    client = Slack::Web::Client.new
     blocks = [
       header_block,
       name_block,
@@ -15,7 +14,7 @@ class Slack::Views::NewIncident < Slack::Web::Client
       severity_select_block
     ]
 
-    view_payload = {
+    {
       trigger_id: params["trigger_id"],
       view: {
         type: "modal",

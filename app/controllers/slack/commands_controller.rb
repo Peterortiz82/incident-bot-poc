@@ -6,6 +6,8 @@ class Slack::CommandsController < ApplicationController
   def create
     view_payload = Slack::Views::NewIncident.new(params).generate_payload
     render json: @client.views_open(view_payload)
+
+    head :ok
   end
 
   private
