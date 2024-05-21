@@ -32,11 +32,12 @@ class Slack::ActionsController < ApplicationController
     state_values = payload['view']['state']['values']
 
     incident_name = state_values.dig('TxCjU', 'incident_name', 'value')
-    incident_description = state_values.dig('QwWBy', 'incident_description', 'value')
+    incident_name_without_whitespace = incident_name.gsub(/\s+/, '-')
+    state_values.dig('QwWBy', 'incident_description', 'value')
     selected_users = state_values.dig('incident_add_users_section', 'text1234', 'selected_users')
 
     # Create a new Slack channel
-    response = @client.conversations_create(name: incident_name, is_private: false)
+    response = @client.conversations_create(name: "incident-#{incident_name_without_whitespace}-#{Time.now.strftime('%Y%m%d')}", is_private: false)
 
     if response['ok']
       channel_id = response['channel']['id']
@@ -44,7 +45,7 @@ class Slack::ActionsController < ApplicationController
       # Invite selected users to the new channel
       if selected_users && !selected_users.empty?
         begin
-          invite_response = @client.conversations_invite(channel: channel_id, users: selected_users.join(','))
+          @client.conversations_invite(channel: channel_id, users: selected_users.join(','))
         rescue Slack::Web::Api::Errors::SlackError => e
           puts "Slack API Error: #{e.message}"
           render json: { error: e.message }, status: :unprocessable_entity
